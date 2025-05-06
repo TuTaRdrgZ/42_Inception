@@ -14,10 +14,10 @@ services:
     build: ./requirements/wordpress/
     restart: on-failure
     environment:
-      WORDPRESS_DB_HOST: mariadb
-      WORDPRESS_DB_USER: bautrodr
-      WORDPRESS_DB_PASSWORD: password
-      WORDPRESS_DB_NAME: mariadb
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
     volumes:
       - wordpress_data:/var/www/html
     depends_on:
@@ -29,10 +29,10 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MARIADB_DATABASE: mariadb
-      MARIADB_USER: bautrodr
-      MARIADB_PASSWORD: password
-      MARIADB_ROOT_PASSWORD: password
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
 
@@ -43,3 +43,4 @@ volumes:
 networks:
   default:
     driver: bridge
+
