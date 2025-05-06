@@ -15,20 +15,22 @@ services:
     restart: on-failure
     environment:
       WORDPRESS_DB_HOST: mariadb
-      WORDPRESS_DB_USER: tutaso
+      WORDPRESS_DB_USER: bautrodr
       WORDPRESS_DB_PASSWORD: password
-      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_NAME: mariadb
     volumes:
       - wordpress_data:/var/www/html
     depends_on:
       - mariadb
 
   mariadb:
-    image: mariadb:latest
+    build: ./requirements/mariadb/
     restart: on-failure
+    ports:
+      - "3306:3306"
     environment:
-      MARIADB_DATABASE: wordpress
-      MARIADB_USER: tutaso
+      MARIADB_DATABASE: mariadb
+      MARIADB_USER: bautrodr
       MARIADB_PASSWORD: password
       MARIADB_ROOT_PASSWORD: password
     volumes:
