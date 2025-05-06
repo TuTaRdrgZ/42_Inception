@@ -27,7 +27,8 @@ RUN curl -o wordpress.tar.gz -L https://wordpress.org/latest.tar.gz \
 	&& mv wordpress/* /var/www/html/ \
 	&& chown -R www-data:www-data /var/www/html
 
-COPY --chmod=755 php-entrypoint.sh /
+COPY php-entrypoint.sh /
+RUN chmod +x /php-entrypoint.sh
 
 ENTRYPOINT ["/php-entrypoint.sh"]
 
