@@ -3,17 +3,8 @@
 
 set -e
 
-entrypoint_log() {
-    if [ -z "${NGINX_ENTRYPOINT_QUIET_LOGS:-}" ]; then
-        echo "$@"
-    fi
-}
-
 if [ "$1" = "nginx" ] || [ "$1" = "nginx-debug" ]; then
-        entrypoint_log "$0: /docker-entrypoint.d/ is not empty, will attempt to perform configuration"
-
-        entrypoint_log "$0: Looking for shell scripts in /docker-entrypoint.d/"
-        entrypoint_log "$0: Generating ssl certificates"
+        echo "$0: Generating ssl certificates"
         mkdir -p /etc/nginx/ssl
         openssl req -x509 -nodes -days 365 \
         -newkey rsa:2048 \
@@ -37,7 +28,7 @@ if [ "$1" = "nginx" ] || [ "$1" = "nginx-debug" ]; then
 			fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;\\
 		}\\
 	}" /etc/nginx/nginx.conf
-        entrypoint_log "$0: Configuration complete; ready for start up"
+        echo "$0: Configuration complete; ready for start up"
 fi
 
 exec "$@"
