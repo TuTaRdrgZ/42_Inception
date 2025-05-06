@@ -1,48 +1,43 @@
 services:
-  mariadb:
-    build:
-      context: ./requirements/mariadb
-      dockerfile: Dockerfile
-    container_name: mariadb
-    image: mariadb
-    volumes:
-      - mdb:/var/lib/mysql
-    expose: 
-      - "3306"
-    env_file: /home/bautrodr/.env
-    networks:
-      - inception_web
-    restart: on-failure
+
   nginx:
-    hostname: nginx
-    build:
-      context: ./requirements/nginx/
-      dockerfile: Dockerfile
-    container_name: nginx
-    image: nginx
+    build: ./requirements/nginx
+    restart: on-failure
+    ports:
+      - 8080:80
     volumes:
-      - wp:/var/www/html
-    ports: 
-      - 443:443
-    networks:
-      - inception_web
+      - wordpress_data:/var/www/html
     depends_on:
       - wordpress
-    restart: on_failure
+
   wordpress:
-    hostname: wordpress
-    build:
-      context: ./requirements/wordpress
-      dockerfile: Dockerfile
-    image: wordpress
-    container_name: wordpress
+    image: wordpress:6.8.1-php8.1-fpm-alpine
+    restart: on-failure
+    environment:
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_USER: tutaso
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DB_NAME: wordpress
     volumes:
-      - wp:/var/www/html
-    expose:
-      - "9000"
+      - wordpress_data:/var/www/html
     depends_on:
       - mariadb
-    env_file: /home/bautrodr/.env
-    networks:
-      - inception_web
+
+  mariadb:
+    image: mariadb:latest
     restart: on-failure
+    environment:
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: tutaso
+      MARIADB_PASSWORD: password
+      MARIADB_ROOT_PASSWORD: password
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  wordpress_data:
+  db_data:
+
+networks:
+  default:
+    driver: bridge
