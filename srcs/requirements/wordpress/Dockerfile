@@ -11,13 +11,11 @@ ENV PHP_INI_DIR /usr/local/etc/php
 
 RUN set -eux; \
 	mkdir -p "$PHP_INI_DIR/conf.d"; \
-# allow running as an arbitrary user (https://github.com/docker-library/php/issues/743)
-	[ ! -d /var/www/html ]; \
 	mkdir -p /var/www/html; \
 	chown www-data:www-data /var/www/html; \
 	chmod 1777 /var/www/html
 
-RUN apk update && apk add php83 php83-fpm php83-mysqli php-zlib php83-curl php83-json php83-xml php83-phar php83-intl php83-dom php83-xmlreader php83-ctype php83-session php83-mbstring mariadb-client curl bash
+RUN apk update && apk add php83 php83-fpm php83-mysqli php-zlib php83-curl php83-json php83-xml php83-phar php83-intl php83-dom php83-xmlreader php83-ctype php83-session php83-mbstring curl bash
 
 RUN sed -i 's|^listen = .*|listen = 0.0.0.0:9000|' /etc/php83/php-fpm.d/www.conf
 

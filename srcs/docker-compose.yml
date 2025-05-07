@@ -1,14 +1,17 @@
 services:
 
-  nginx:
-    build: ./requirements/nginx
+  mariadb:
+    build: ./requirements/mariadb/
     restart: on-failure
     ports:
-      - 443:443
+      - "3306:3306"
+    environment:
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
     volumes:
-      - wordpress_data:/var/www/html
-    depends_on:
-      - wordpress
+      - db_data:/var/lib/mysql
 
   wordpress:
     build: ./requirements/wordpress/
@@ -23,18 +26,15 @@ services:
     depends_on:
       - mariadb
 
-  mariadb:
-    build: ./requirements/mariadb/
+  nginx:
+    build: ./requirements/nginx
     restart: on-failure
     ports:
-      - "3306:3306"
-    environment:
-      MARIADB_DATABASE: ${MARIADB_DATABASE}
-      MARIADB_USER: ${MARIADB_USER}
-      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
-      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      - 443:443
     volumes:
-      - db_data:/var/lib/mysql
+      - wordpress_data:/var/www/html
+    depends_on:
+      - wordpress
 
 volumes:
   wordpress_data:

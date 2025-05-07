@@ -14,6 +14,7 @@ if [ ! -d /var/lib/mysql/mysql ]; then
   while ! mysqladmin -uroot ping --silent; do
     sleep 1
   done
+  echo "mysqld ready..."
 
   mysql -uroot <<-EOSQL
     ALTER USER 'root'@'localhost' IDENTIFIED BY '${MARIADB_ROOT_PASSWORD}';

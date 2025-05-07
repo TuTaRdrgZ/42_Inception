@@ -12,6 +12,9 @@ up:
 down:
 	@echo "Stopping and removing containers..."
 	@$(COMPOSE) down
+prune: fclean
+	@echo "Removing everything..."
+	@docker system prune --all --force --volumes
 
 re: down up
 
@@ -23,4 +26,4 @@ fclean:
 
 clean: down
 
-.PHONY: all up down re clean fclean
+.PHONY: all up down re clean fclean prune
