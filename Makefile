@@ -6,6 +6,8 @@ DOMAIN=$(shell grep DOMAIN_NAME $(ENV_FILE) | cut -d '=' -f2)
 all: up
 
 up:
+	@mkdir -p /home/bautrodr/data/db
+	@mkdir -p /home/bautrodr/data/wordpress
 	@echo "Starting containers..."
 	@$(COMPOSE) up --build -d
 
