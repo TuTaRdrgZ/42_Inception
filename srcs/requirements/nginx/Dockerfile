@@ -1,7 +1,5 @@
 FROM alpine:3.20
 
-LABEL maintainer="bautrodr <bautrodr@student.42barcelona.com"
-
 RUN set -x \
     && apk add --no-cache openssl nginx
 

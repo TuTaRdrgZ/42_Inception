@@ -16,6 +16,7 @@ if [ "$1" = "nginx" ] || [ "$1" = "nginx-debug" ]; then
 		server_name bautrodr.42.fr;\\
 		ssl_certificate /etc/nginx/ssl/bautrodr.42.fr.crt;\\
 		ssl_certificate_key /etc/nginx/ssl/bautrodr.42.fr.key;\\
+		ssl_protocols TLSv1.2 TLSv1.3;\\
 		root /var/www/html;\\
 		index index.html index.php;\\
 		location / {\\
