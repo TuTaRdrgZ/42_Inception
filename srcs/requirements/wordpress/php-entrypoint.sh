@@ -2,20 +2,51 @@
 set -e
 
 if [ "$1" = 'php-fpm83' ]; then
+
+	while ! nc -z mariadb 3306; do
+		echo "WordPress: Waiting for MariaDB..."
+		sleep 1
+	done
+
     config="/var/www/html/wp-config.php"
+	if [ ! -f "$config" ]; then
+		echo "WordPress: Configuring WordPress..."
 
-    if [ ! -f "$config" ]; then
-        cp /var/www/html/wp-config-sample.php $config
+		curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+		chmod +x wp-cli.phar
+		mv wp-cli.phar /usr/local/bin/wp
 
-        sed -i "s/define( 'DB_NAME', 'database_name_here' );/define( 'DB_NAME', '${WORDPRESS_DB_NAME}' );/" $config
-        sed -i "s/define( 'DB_USER', 'username_here' );/define( 'DB_USER', '${WORDPRESS_DB_USER}' );/" $config
-        sed -i "s/define( 'DB_PASSWORD', 'password_here' );/define( 'DB_PASSWORD', '${WORDPRESS_DB_PASSWORD}' );/" $config
-        sed -i "s/define( 'DB_HOST', 'localhost' );/define( 'DB_HOST', 'mariadb' );/" $config
+		WP="php -d memory_limit=256M /usr/local/bin/wp"
 
-        chown www-data:www-data $config
-    fi
+		$WP core download --allow-root
 
-    echo "WordPress config initialized."
+		$WP config create \
+			--dbname="$WORDPRESS_DB_NAME" \
+			--dbuser="$MARIADB_USER" \
+			--dbpass="$MARIADB_PASSWORD" \
+			--dbhost="$WORDPRESS_DB_HOST" \
+			--allow-root
+
+		$WP core install \
+			--url="$DOMAIN_NAME" \
+			--title="$WORDPRESS_TITLE" \
+			--admin_user="$WORDPRESS_ADMIN_USER" \
+			--admin_password="$WORDPRESS_ADMIN_PASSWORD" \
+			--admin_email="$WORDPRESS_ADMIN_EMAIL" \
+			--skip-email \
+			--allow-root
+
+		$WP user create \
+			"$WORDPRESS_DB_USER" "$WORDPRESS_USER_EMAIL" \
+			--role=author \
+			--user_pass="$WORDPRESS_DB_PASSWORD" \
+			--allow-root
+
+		chown -R www-data:www-data /var/www/html
+	fi
+
+
+    echo "WordPress: Config initialized."
 fi
 
 exec "$@"

@@ -6,8 +6,8 @@ DOMAIN=$(shell grep DOMAIN_NAME $(ENV_FILE) | cut -d '=' -f2)
 all: up
 
 up:
-	@mkdir -p /home/bautrodr/data/db
-	@mkdir -p /home/bautrodr/data/wordpress
+	@mkdir -p /home/tuta/data/db
+	@mkdir -p /home/tuta/data/wordpress
 	@echo "Starting containers..."
 	@$(COMPOSE) up --build -d
 
@@ -21,6 +21,8 @@ prune: fclean
 re: down up
 
 fclean:
+	@rm -rf /home/tuta/data/db
+	@rm -rf /home/tuta/data/wordpress
 	@echo "Full cleanup: volumes, containers, networks..."
 	@$(COMPOSE) down -v --remove-orphans
 	@docker volume rm $(shell docker volume ls -qf dangling=true) 2>/dev/null || true

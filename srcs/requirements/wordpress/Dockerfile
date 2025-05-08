@@ -19,12 +19,6 @@ RUN apk update && apk add php83 php83-fpm php83-mysqli php-zlib php83-curl php83
 
 RUN sed -i 's|^listen = .*|listen = 0.0.0.0:9000|' /etc/php83/php-fpm.d/www.conf
 
-RUN curl -o wordpress.tar.gz -L https://wordpress.org/latest.tar.gz \
-	&& tar -xzf wordpress.tar.gz \
-	&& rm wordpress.tar.gz \
-	&& mv wordpress/* /var/www/html/ \
-	&& chown -R www-data:www-data /var/www/html
-
 COPY php-entrypoint.sh /
 RUN chmod +x /php-entrypoint.sh
 
