@@ -1,7 +1,5 @@
 NAME=inception
 COMPOSE=docker-compose -f srcs/docker-compose.yml
-ENV_FILE=srcs/.env
-DOMAIN=$(shell grep DOMAIN_NAME $(ENV_FILE) | cut -d '=' -f2)
 USERNAME=$(shell whoami)
 VOLUME_PATH=/home/$(USERNAME)/data
 
@@ -16,6 +14,7 @@ up:
 down:
 	@echo "Stopping and removing containers..."
 	@$(COMPOSE) down
+
 prune: fclean
 	@echo "Removing everything..."
 	@docker system prune --all --force --volumes

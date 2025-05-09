@@ -7,7 +7,7 @@ RUN mkdir -p /run/mysqld /var/lib/mysql && \
 
 COPY ./conf.d/ /etc/my.cnf.d
 
-COPY ./mariadb-entrypoint.sh /mariadb-entrypoint.sh
+COPY ./tools/mariadb-entrypoint.sh /mariadb-entrypoint.sh
 
 RUN chmod +x /mariadb-entrypoint.sh
 

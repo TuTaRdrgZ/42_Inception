@@ -3,7 +3,7 @@ FROM alpine:3.20
 RUN set -x \
     && apk add --no-cache openssl nginx
 
-COPY  nginx-entrypoint.sh / 
+COPY  ./tools/nginx-entrypoint.sh / 
 RUN chmod +x /nginx-entrypoint.sh
 
 ENTRYPOINT ["/nginx-entrypoint.sh"]

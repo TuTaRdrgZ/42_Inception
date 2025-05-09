@@ -35,17 +35,16 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/tuta/data/db
+      device: /home/bautrodr/data/db
       o: bind
 
   wordpress_data:
     driver: local
     driver_opts:
       type: none
-      device: /home/tuta/data/wordpress
+      device: /home/bautrodr/data/wordpress
       o: bind
 
 networks:
   default:
     driver: bridge
-

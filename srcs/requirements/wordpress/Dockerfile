@@ -19,10 +19,10 @@ RUN apk update && apk add php83 php83-fpm php83-mysqli php-zlib php83-curl php83
 
 RUN sed -i 's|^listen = .*|listen = 0.0.0.0:9000|' /etc/php83/php-fpm.d/www.conf
 
-COPY php-entrypoint.sh /
-RUN chmod +x /php-entrypoint.sh
+COPY ./tools/wordpress-entrypoint.sh /
+RUN chmod +x /wordpress-entrypoint.sh
 
-ENTRYPOINT ["/php-entrypoint.sh"]
+ENTRYPOINT ["/wordpress-entrypoint.sh"]
 
 WORKDIR /var/www/html
 
